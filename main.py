@@ -26,3 +26,63 @@ class Mixer:
     def print_list(self):
         for idx, file in enumerate(self.files):
             print('===[' + str(idx) + ']', file)
+
+    # mix all cuted files
+    def mix(self):
+        song = AudioSegment.empty()
+        for file in self.cuted_files:
+            song += self.cuted_files[file]
+        song.export("result.mp3", format="mp3")
+
+    # run function with menu
+    def run(self):
+        '''method to run menu
+        menu:
+            1) Choose file
+            2) Mix files
+            3) Exit
+        '''
+        while True:
+            print('1) Choose file')
+            print('2) Mix files')
+            print('3) Exit')
+            try:
+                choice = int(input())
+            except ValueError:
+                print('Wrong input')
+                continue
+            if choice == 1:
+                self.print_list()
+                try:
+                    choice = int(input())
+                except ValueError:
+                    print('Wrong input')
+                    continue
+                if choice >= len(self.files):
+                    print('Wrong input')
+                    continue
+                file = self.files[choice]
+                print('Start time:')
+                try:
+                    start = int(input())
+                except ValueError:
+                    print('Wrong input')
+                    continue
+                print('End time:')
+                try:
+                    end = int(input())
+                except ValueError:
+                    print('Wrong input')
+                    continue
+                self.cut(file, start, end)
+            elif choice == 2:
+                self.mix()
+            elif choice == 3:
+                sys.exit(0)
+            else:
+                print('Wrong input')
+
+
+if __name__ == '__main__':
+    app = Mixer("music/")
+    app.run()
